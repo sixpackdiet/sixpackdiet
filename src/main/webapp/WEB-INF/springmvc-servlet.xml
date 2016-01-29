@@ -1,0 +1,55 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<mvc:annotation-driven />
+	<context:component-scan base-package="com.sixpackdiet.controller" />
+	<context:component-scan base-package="com.sixpackdiet.service.impl" />
+	<context:component-scan base-package="com.sixpackdiet.dao.impl" />
+	
+	<!-- <bean id="messageSource" class="org.springwork.context.support.ReloadableResourceBundleMessageSource"> 
+		<property name="basenames"> <list> <value>/WEB-INF/messages.properties</value> 
+		</list> </property> </bean> -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix">
+			<value>/jsp/</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+	</bean>
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver" />
+		<property name="url" value="jdbc:derby://localhost:1527/databaseName;create=true" />
+<!-- 		<property name="username" value="root" />
+		<property name="password" value="password" />-->
+ 	</bean>
+ 	
+ 	<!-- <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"> -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+ 		<property name="dataSource" ref="dataSource"/>
+ 		<property name="packagesToScan" value="com.sixpackdiet.bean" />
+ 		<property name="hibernateProperties">
+ 			<props>
+ 				<prop key="hibernate.dialect">org.hibernate.dialect.DerbyDialect</prop>
+ 			</props>
+ 		</property>
+ 	</bean>
+ 	
+ 	<bean id="foodItemService" class="com.sixpackdiet.service.impl.FoodItemServiceImpl"/>
+	<bean id="foodItemDao" class="com.sixpackdiet.dao.impl.FoodItemDaoImpl"/>
+ 	
+
+	<mvc:resources mapping="/resources/**" location="/resources/theme/"
+		cache-period="31556926" />
+</beans>
